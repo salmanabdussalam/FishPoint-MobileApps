@@ -1,19 +1,4 @@
-<div align="center">
-
-# <img src="assets/logo.png" width="40"> FishPoint
-
-**Aplikasi komunitas pemancing — temukan dan bagikan spot mancing terbaik.**
-
-![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)
-![Language](https://img.shields.io/badge/Language-Kotlin-7F52FF?logo=kotlin&logoColor=white)
-![UI](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=white)
-![Status](https://img.shields.io/badge/Status-Selesai-brightgreen)
-
-*Pengembangan Aplikasi Bergerak · Kelompok 1 · Informatika UNS 2025/2026*
-
-</div>
-
----
+# FishPoint
 
 FishPoint adalah aplikasi Android yang dirancang khusus untuk para pemancing. Aplikasi ini memudahkan komunitas pemancing untuk saling berbagi, mencari, dan mengelola informasi lokasi spot memancing terbaik. 
 
