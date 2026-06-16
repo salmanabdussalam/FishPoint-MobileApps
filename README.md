@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🐟 FishPoint
+# 🎣 FishPoint
 
 **Aplikasi komunitas pemancing — temukan dan bagikan spot mancing terbaik.**
 
@@ -9,7 +9,7 @@
 ![UI](https://img.shields.io/badge/UI-Jetpack%20Compose-4285F4?logo=jetpackcompose&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Done-brightgreen)
 
-*Rekayasa Perangkat Lunak · Kelompok 1 · Informatika UNS 2025/2026*
+*Pengembangan Aplikasi Bergerak · Kelompok 1 · Informatika UNS 2025/2026*
 
 </div>
 
