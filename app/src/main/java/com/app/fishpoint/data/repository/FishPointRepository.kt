@@ -60,7 +60,7 @@ class FishPointRepository(private val api: FishPointApi) {
             if (photoParts.isNotEmpty()) {
                 val textPlain = "text/plain".toMediaTypeOrNull()
                 val response = api.manageSpotWithPhotos(
-                    action = "create".toRequestBody(textPlain), id = null, userId = userId.toString().toRequestBody(textPlain), name = name.toRequestBody(textPlain), waterType = waterType.toRequestBody(textPlain), category = "".toRequestBody(textPlain), latitude = latitude.toString().toRequestBody(textPlain), longitude = longitude.toString().toRequestBody(textPlain), targetFish = targetFish.toRequestBody(textPlain), description = description.toRequestBody(textPlain), photos = photoParts
+                    action = "create".toRequestBody(textPlain), id = null, userId = userId.toString().toRequestBody(textPlain), name = name.toRequestBody(textPlain), waterType = waterType.toRequestBody(textPlain), category = "".toRequestBody(textPlain), latitude = latitude.toString().toRequestBody(textPlain), longitude = longitude.toString().toRequestBody(textPlain), targetFish = targetFish.toRequestBody(textPlain), description = description.toRequestBody(textPlain), retainedPhotos = null, photos = photoParts
                 )
                 if (response.status == "success" && response.data != null) Result.success(response.data.id) else Result.failure(Exception(response.message))
             } else {
@@ -74,10 +74,13 @@ class FishPointRepository(private val api: FishPointApi) {
         context: android.content.Context, spotId: Int, userId: Int, name: String, waterType: String, latitude: Double, longitude: Double, targetFish: String, description: String, photos: List<String>
     ): Result<Unit> = withContext(Dispatchers.IO) {
         try {
+            val retainedRemoteUrls = mutableListOf<String>()
             val photoParts = mutableListOf<okhttp3.MultipartBody.Part>()
             for (uriString in photos) {
-                // Jangan upload foto yang sudah punya remoteUrl (bukan URI lokal)
-                if (uriString.startsWith("http")) continue
+                if (uriString.startsWith("http")) {
+                    retainedRemoteUrls.add(uriString)
+                    continue
+                }
 
                 try {
                     val uri = android.net.Uri.parse(uriString)
@@ -95,12 +98,13 @@ class FishPointRepository(private val api: FishPointApi) {
 
             if (photoParts.isNotEmpty()) {
                 val textPlain = "text/plain".toMediaTypeOrNull()
+                val retainedJson = com.google.gson.Gson().toJson(retainedRemoteUrls).toRequestBody(textPlain)
                 val response = api.manageSpotWithPhotos(
-                    action = "update".toRequestBody(textPlain), id = spotId.toString().toRequestBody(textPlain), userId = userId.toString().toRequestBody(textPlain), name = name.toRequestBody(textPlain), waterType = waterType.toRequestBody(textPlain), category = "".toRequestBody(textPlain), latitude = latitude.toString().toRequestBody(textPlain), longitude = longitude.toString().toRequestBody(textPlain), targetFish = targetFish.toRequestBody(textPlain), description = description.toRequestBody(textPlain), photos = photoParts
+                    action = "update".toRequestBody(textPlain), id = spotId.toString().toRequestBody(textPlain), userId = userId.toString().toRequestBody(textPlain), name = name.toRequestBody(textPlain), waterType = waterType.toRequestBody(textPlain), category = "".toRequestBody(textPlain), latitude = latitude.toString().toRequestBody(textPlain), longitude = longitude.toString().toRequestBody(textPlain), targetFish = targetFish.toRequestBody(textPlain), description = description.toRequestBody(textPlain), retainedPhotos = retainedJson, photos = photoParts
                 )
                 if (response.status == "success") Result.success(Unit) else Result.failure(Exception(response.message))
             } else {
-                val response = api.manageSpot(SpotRequest(action = "update", id = spotId, user_id = userId, name = name, water_type = waterType, latitude = latitude, longitude = longitude, target_fish = targetFish, description = description))
+                val response = api.manageSpot(SpotRequest(action = "update", id = spotId, user_id = userId, name = name, water_type = waterType, latitude = latitude, longitude = longitude, target_fish = targetFish, description = description, retained_photos = retainedRemoteUrls))
                 if (response.status == "success") Result.success(Unit) else Result.failure(Exception(response.message))
             }
         } catch (e: Exception) { Result.failure(e) }
@@ -115,7 +119,6 @@ class FishPointRepository(private val api: FishPointApi) {
 
     suspend fun deleteSpot(spotId: Int): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            // Kita butuh param dummy (userId=0, dll) karena model SpotRequest me-require-nya, tapi backend cuma cek id
             val response = api.manageSpot(SpotRequest(action = "delete", id = spotId, user_id = 0, name = "", water_type = "", latitude = 0.0, longitude = 0.0))
             if (response.status == "success") Result.success(Unit) else Result.failure(Exception(response.message))
         } catch (e: Exception) { Result.failure(e) }
