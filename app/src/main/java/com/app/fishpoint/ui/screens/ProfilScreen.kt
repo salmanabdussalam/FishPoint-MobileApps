@@ -36,6 +36,12 @@ fun ProfilScreen(onBerandaClick: () -> Unit, onTambahClick: () -> Unit, onLogout
         EditProfilDialog(currentName = user.fullName ?: "", onDismiss = { showEditDialog = false }, onSave = { newName -> authViewModel.updateFullName(newName); showEditDialog = false })
     }
 
+    LaunchedEffect(Unit) {
+        if (!spotViewModel.isLoading) {
+            spotViewModel.fetchSpots()
+        }
+    }
+
     Scaffold(bottomBar = { FishPointBottomBar(currentRoute = Screen.Profil.route, onBeranda = onBerandaClick, onTambah = onTambahClick, onProfil = {}) }, containerColor = PageBackground) { innerPadding ->
         Column(modifier = Modifier.fillMaxSize().padding(innerPadding).verticalScroll(rememberScrollState())) {
             Box(modifier = Modifier.fillMaxWidth().background(FishGreenDark).padding(vertical = 28.dp), contentAlignment = Alignment.Center) {
