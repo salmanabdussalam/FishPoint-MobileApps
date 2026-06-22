@@ -35,7 +35,6 @@ fun DetailSpotScreen(spotId: Int, currentUsername: String?, currentUserId: Int?,
     var showAddReview by remember { mutableStateOf(false) }
     var reviewText by remember { mutableStateOf("") }
     var selectedRating by remember { mutableIntStateOf(0) }
-    val alreadyReviewed = currentUsername != null && spot.hasReviewFrom(currentUsername)
 
     Scaffold(containerColor = Color.White) { innerPadding ->
         Column(modifier = Modifier.fillMaxSize().padding(innerPadding).verticalScroll(rememberScrollState())) {
@@ -116,11 +115,10 @@ fun DetailSpotScreen(spotId: Int, currentUsername: String?, currentUserId: Int?,
 
             Row(modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
                 Text("ULASAN", fontSize = 13.sp, fontWeight = FontWeight.Bold, color = TextPrimary, letterSpacing = 1.sp)
-                if (alreadyReviewed) Text("Anda sudah memberi ulasan", fontSize = 11.sp, color = TextHint)
-                else OutlinedButton(onClick = { if (currentUsername == null) onRequireLogin() else showAddReview = !showAddReview }, shape = RoundedCornerShape(6.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp), modifier = Modifier.height(32.dp)) { Text(if (currentUsername == null) "Login untuk Ulasan" else "Tambah Ulasan", fontSize = 12.sp) }
+                OutlinedButton(onClick = { if (currentUsername == null) onRequireLogin() else showAddReview = !showAddReview }, shape = RoundedCornerShape(6.dp), colors = ButtonDefaults.outlinedButtonColors(contentColor = TextPrimary), contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp), modifier = Modifier.height(32.dp)) { Text(if (currentUsername == null) "Login untuk Ulasan" else "Tambah Ulasan", fontSize = 12.sp) }
             }
 
-            if (showAddReview && !alreadyReviewed && currentUsername != null) {
+            if (showAddReview && currentUsername != null) {
                 Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
                     Text("Beri Rating", fontSize = 12.sp, color = TextSecondary)
                     Spacer(Modifier.height(4.dp))
