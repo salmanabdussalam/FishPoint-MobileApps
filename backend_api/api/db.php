@@ -5,9 +5,10 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 $host = 'localhost';
-$db   = 'fishpoint_db'; // Pastikan nama DB sesuai dengan yang dibuat di phpMyAdmin
-$user = 'root';         // Default Laragon
-$pass = '';             // Default Laragon kosong
+$db   = 'abdsal40_fishdb';
+$user = 'abdsal40_fishdb';
+$pass = 'e3xgzKXVdLXfryS';
+$charset = 'utf8mb4';            
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $pass);
