@@ -59,7 +59,8 @@ if ($method === 'POST') {
 
         // Proses Upload Foto jika ada
         if ($isMultipart && isset($_FILES['photos'])) {
-            $baseURL = "http://" . $_SERVER['HTTP_HOST'] . "/backend_api/uploads/"; // URL untuk diakses Android
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";
+            $baseURL = $protocol . $_SERVER['HTTP_HOST'] . str_replace("/api/spots.php", "", $_SERVER['SCRIPT_NAME']) . "/uploads/";
             $fileCount = count($_FILES['photos']['name']);
             
             for ($i = 0; $i < $fileCount; $i++) {
@@ -80,10 +81,36 @@ if ($method === 'POST') {
     if ($action === 'update') {
         $stmt = $pdo->prepare("UPDATE spots SET name=?, water_type=?, latitude=?, longitude=?, target_fish=?, description=? WHERE id=? AND user_id=?");
         $stmt->execute([$name, $water_type, $latitude, $longitude, $target_fish ?? '', $description ?? '', $id, $user_id]);
+
+        $retained_photos = [];
+        if (isset($_POST['retained_photos'])) {
+            $retained_photos = json_decode($_POST['retained_photos'], true) ?: [];
+        } elseif (!$isMultipart && isset($data['retained_photos'])) {
+            $retained_photos = $data['retained_photos'];
+        }
+
+        if (is_array($retained_photos)) {
+            $stmtPhotos = $pdo->prepare("SELECT id, file_path FROM spot_photos WHERE spot_id=?");
+            $stmtPhotos->execute([$id]);
+            $existingPhotos = $stmtPhotos->fetchAll();
+
+            foreach ($existingPhotos as $photo) {
+                if (!in_array($photo['file_path'], $retained_photos)) {
+                    $pdo->prepare("DELETE FROM spot_photos WHERE id=?")->execute([$photo['id']]);
+                    $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";
+                    $basePathUrl = $protocol . $_SERVER['HTTP_HOST'] . str_replace("/api/spots.php", "", $_SERVER['SCRIPT_NAME']) . "/";
+                    $localPath = str_replace($basePathUrl, "../", $photo['file_path']);
+                    if (file_exists($localPath)) {
+                        unlink($localPath);
+                    }
+                }
+            }
+        }
         
         // Proses Upload Foto Tambahan jika ada
         if ($isMultipart && isset($_FILES['photos'])) {
-            $baseURL = "http://" . $_SERVER['HTTP_HOST'] . "/backend_api/uploads/"; // URL untuk diakses Android
+            $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";
+            $baseURL = $protocol . $_SERVER['HTTP_HOST'] . str_replace("/api/spots.php", "", $_SERVER['SCRIPT_NAME']) . "/uploads/";
             $fileCount = count($_FILES['photos']['name']);
             
             // Cari urutan terbesar saat ini agar urutan foto baru berlanjut
