@@ -38,6 +38,7 @@ interface FishPointApi {
         @Part("longitude") longitude: okhttp3.RequestBody,
         @Part("target_fish") targetFish: okhttp3.RequestBody,
         @Part("description") description: okhttp3.RequestBody,
+        @Part("retained_photos") retainedPhotos: okhttp3.RequestBody?,
         @Part photos: List<okhttp3.MultipartBody.Part>
     ): ApiResponse<SpotIdResponse>
 
@@ -48,8 +49,7 @@ interface FishPointApi {
     suspend fun manageUser(@Body request: UserManageRequest): ApiResponse<Unit>
 
     companion object {
-        // Menggunakan IP Laptop + Laragon
-        private const val BASE_URL = "http://172.24.184.224/backend_api/"
+        private const val BASE_URL = "http://fishpoint-api.biz.ly/backend_api/"
 
         fun create(): FishPointApi {
             val client = OkHttpClient.Builder().build()
