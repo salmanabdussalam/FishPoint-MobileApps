@@ -25,7 +25,7 @@ import com.app.fishpoint.ui.viewmodel.SpotViewModel
 @Composable
 fun BerandaScreen(isGuest: Boolean, viewModel: SpotViewModel, onSpotClick: (Int) -> Unit, onTambahClick: () -> Unit, onProfilClick: () -> Unit) {
     LaunchedEffect(Unit) {
-        if (viewModel.spots.isEmpty() && !viewModel.isLoading) {
+        if (!viewModel.isLoading) {
             viewModel.fetchSpots()
         }
     }
