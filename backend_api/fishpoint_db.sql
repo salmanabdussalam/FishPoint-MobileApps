@@ -1,7 +1,3 @@
--- Buat database jika belum ada
-CREATE DATABASE IF NOT EXISTS `fishpoint_db`;
-USE `fishpoint_db`;
-
 -- Struktur tabel untuk `users`
 CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
