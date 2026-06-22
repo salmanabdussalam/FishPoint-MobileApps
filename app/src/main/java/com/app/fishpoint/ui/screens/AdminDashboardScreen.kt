@@ -37,6 +37,12 @@ fun AdminDashboardScreen(
 ) {
     var activeTab by remember { mutableStateOf(AdminTab.SPOT) }
 
+    LaunchedEffect(Unit) {
+        if (!spotViewModel.isLoading) {
+            spotViewModel.fetchSpots()
+        }
+    }
+
     Scaffold(
         containerColor = PageBackground
     ) { innerPadding ->
