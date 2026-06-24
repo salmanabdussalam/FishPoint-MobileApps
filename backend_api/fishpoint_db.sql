@@ -58,3 +58,15 @@ INSERT IGNORE INTO `spots` (`id`, `user_id`, `name`, `water_type`, `category`, `
 -- Data awal untuk tabel `reviews`
 INSERT IGNORE INTO `reviews` (`id`, `spot_id`, `user_id`, `rating`, `comment`) VALUES
 (1, 1, 2, 5, 'Spotnya mantap, ikannya banyak banget!');
+
+-- Struktur tabel untuk `spot_photos`
+CREATE TABLE IF NOT EXISTS `spot_photos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `spot_id` int(11) NOT NULL,
+  `file_path` varchar(255) NOT NULL,
+  `sort_order` int(11) DEFAULT 0,
+  `uploaded_at` timestamp DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `spot_id` (`spot_id`),
+  CONSTRAINT `fk_photo_spot` FOREIGN KEY (`spot_id`) REFERENCES `spots` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
