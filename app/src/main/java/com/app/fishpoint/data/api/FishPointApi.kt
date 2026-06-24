@@ -49,7 +49,7 @@ interface FishPointApi {
     suspend fun manageUser(@Body request: UserManageRequest): ApiResponse<Unit>
 
     companion object {
-        private const val BASE_URL = "http://fishpoint-api.biz.ly/backend_api/"
+        private const val BASE_URL = "https://fishpoint-api.my.id/backend_api/"
 
         fun create(): FishPointApi {
             val client = OkHttpClient.Builder().build()
