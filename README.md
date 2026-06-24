@@ -2,7 +2,7 @@
   <img src="assets/logo_fishpoint.png" alt="FishPoint Logo" width="120"/>
 </p>
 
-<h1 align="center">🎣 FishPoint</h1>
+<h1 align="center"> FishPoint</h1>
 
 <p align="center">
   <strong>Temukan spot memancing terbaik di sekitarmu!</strong>
