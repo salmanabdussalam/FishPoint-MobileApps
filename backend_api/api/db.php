@@ -5,9 +5,9 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
 
 $host = 'localhost';
-$db   = 'abdsal40_fishdb';
-$user = 'abdsal40_fishdb';
-$pass = 'e3xgzKXVdLXfryS';
+$db   = 'tusymvvm_fishpoint';
+$user = 'tusymvvm_tusymvvm';
+$pass = 'PBsuU74d2p#kPJv';
 $charset = 'utf8mb4';            
 
 try {
